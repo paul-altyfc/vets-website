@@ -102,23 +102,24 @@ export const fetchProviderDetail = id => async dispatch => {
  * @param {Function} dispatch Redux's dispatch method
  * @param {number} api version number
  */
-const fetchLocations = async (
+export const fetchLocations = async (
   address = null,
   bounds,
   locationType,
   serviceType,
   page,
   dispatch,
-  apiVersion,
 ) => {
   try {
+    // eslint-disable-next-line no-console
+    console.log('in fetchLocations, LocatorApi is', LocatorApi);
+
     const data = await LocatorApi.searchWithBounds(
       address,
       bounds,
       locationType,
       serviceType,
       page,
-      apiVersion,
     );
     // Record event as soon as API return results
     if (data.errors) {
@@ -143,7 +144,6 @@ export const searchWithBounds = ({
   facilityType,
   serviceType,
   page = 1,
-  apiVersion,
 }) => {
   const needsAddress = [
     LocationType.CC_PROVIDER,
@@ -178,19 +178,10 @@ export const searchWithBounds = ({
           serviceType,
           page,
           dispatch,
-          apiVersion,
         );
       });
     } else {
-      fetchLocations(
-        null,
-        bounds,
-        facilityType,
-        serviceType,
-        page,
-        dispatch,
-        apiVersion,
-      );
+      fetchLocations(null, bounds, facilityType, serviceType, page, dispatch);
     }
   };
 };
